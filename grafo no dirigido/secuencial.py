@@ -56,17 +56,29 @@ class Secuencial:
                             pila.append((i, caminoActual + [i]))
                             
                             
-    def conexo(self): #profundidad
+    def BEP(self, nodo):
         visitados = [False] * self.__numVertices
-        pila = [0]
+        pila = [nodo]
         
         while pila:
-            vertice = pila.pop() #amplitud es popleft
+            vertice = pila.pop() 
             if not visitados[vertice]:
                 visitados[vertice] = True
                 for i in range(self.__numVertices):
                     if self.__matriz[vertice][i] == 1 and not visitados[i]:
                         pila.append(i)
+        return all(visitados)
+
+    def BEA(self,nodo):
+        visitados = [False] * self.__numVertices
+        cola = [nodo]
+        while cola:
+            vertice = cola.pop(0)
+            if not visitados[vertice]:
+                visitados[vertice] = True
+                for i in range(self.__numVertices):
+                    if self.__matriz[vertice][i] == 1 and not visitados[i]:
+                        cola.append(i)
         return all(visitados)
 
     def aciclico(self):
@@ -99,7 +111,7 @@ if __name__ == "__main__":
     g.grado(1)
     g.camino(0, 4)
     
-    if g.conexo():
+    if g.BEP(0):
         print("grafo conexo")
     else:
         print("no es conexo")

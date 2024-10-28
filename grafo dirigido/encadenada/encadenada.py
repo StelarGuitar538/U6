@@ -110,9 +110,9 @@ class encadenada:
    
     
     
-    def conexo(self):
+    def BEP(self, nodo):
         visitados = [False] * self.__cvertices
-        pila=[0]
+        pila=[nodo]
         
         while pila: #Es lo mismo decir while len(pila)>0, pregunta si está vacía o no
             vertice=pila.pop()
@@ -125,6 +125,18 @@ class encadenada:
                     if not visitados[vecino]!=False:
                         pila.append(vecino)
                     actual = actual.getSig()
+        return all(visitados)
+    
+    def BEA(self,nodo):
+        visitados = [False] * self.__cvertices
+        cola = [nodo]
+        while cola:
+            vertice = cola.pop(0)
+            if not visitados[vertice]:
+                visitados[vertice] = True
+                for i in range(self.__cvertices):
+                    if self.__arreglo[vertice][i] == 1 and not visitados[i]:
+                        cola.append(i)
         return all(visitados)
        
     def aciclico(self):
@@ -177,7 +189,7 @@ if __name__== "__main__":
     
     print(f" Camino final: {e.camino(1,4)}")
     
-    if e.conexo()!=False:
+    if e.BEP(0)!=False:
         print ("El grafo es conexo")
     else:  print ("El grafo no es conexo")
 

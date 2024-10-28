@@ -46,7 +46,7 @@ class Secuencial:
             return grado
         
     def nodoFuente(self, nodo): #no tiene aristas entrantes
-        if self.gradoEntrada(nodo) == 0:
+        if self.gradoEntrada(nodo) == 0 and self.gradoSalida(nodo) > 0:
             print(f"nodo {nodo} es fuente")
             return True
         else:
@@ -54,7 +54,7 @@ class Secuencial:
             return False
 
     def nodoSumidero(self, nodo): #no tiene aristas salientes
-        if self.gradoSalida(nodo) == 0:
+        if self.gradoSalida(nodo) == 0 and self.gradoEntrada(nodo) > 0:
             print(f"nodo {nodo} es sumidero")
             return True
         else:
@@ -81,20 +81,31 @@ class Secuencial:
                     for i in range(self.__numVertices):
                         if self.__matriz[nodoActual, i] == 1 and not visitados[i]:
                             pila.append((i, caminoActual + [i]))
-                            
-                            
-    def conexo(self): #profundidad
+
+    def BEP(self, nodo):
         visitados = [False] * self.__numVertices
-        pila = [0]
-        
+        pila = [nodo]
         while pila:
-            vertice = pila.pop() #amplitud es popleft
+            vertice = pila.pop()
             if not visitados[vertice]:
                 visitados[vertice] = True
                 for i in range(self.__numVertices):
                     if self.__matriz[vertice][i] == 1 and not visitados[i]:
                         pila.append(i)
         return all(visitados)
+    
+    def BEA(self,nodo):
+        visitados = [False] * self.__numVertices
+        cola = [nodo]
+        while cola:
+            vertice = cola.pop(0)
+            if not visitados[vertice]:
+                visitados[vertice] = True
+                for i in range(self.__numVertices):
+                    if self.__matriz[vertice][i] == 1 and not visitados[i]:
+                        cola.append(i)
+        return all(visitados)
+    
 
     def aciclico(self):
         visitados = [False] * self.__numVertices
@@ -133,7 +144,7 @@ if __name__ == "__main__":
     
     g.camino(0, 4)
     
-    if g.conexo():
+    if g.BEP(0):
         print("grafo conexo")
     else:
         print("no es conexo")
