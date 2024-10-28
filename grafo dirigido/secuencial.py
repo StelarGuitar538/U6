@@ -12,7 +12,7 @@ class Secuencial:
         if origen >= self.__numVertices or destino >= self.__numVertices:
             raise ValueError("El origen o el destino no es válido")
         self.__matriz[origen, destino] = peso
-        self.__matriz[destino, origen] = peso
+
         
     def mostrar(self):
         for fila in self.__matriz:
@@ -29,11 +29,38 @@ class Secuencial:
             for j in range(len(adyacentes)):
                 print(f"Nodo {nodo} tiene un adyacente {adyacentes[j]}")
                 
-    def grado(self, nodo): #cantidad de conexiones que tiene
+    def gradoSalida(self, nodo): #cantidad de aristas que salen de un nodo
         if nodo >= self.__numVertices:
             raise ValueError("nodo fuera de rango")
         else:
-            print(f"el grado del nodo {nodo} es {np.sum(self.__matriz[nodo])}")
+            grado = np.sum(self.__matriz[nodo])
+            print(f"el grado de salida del nodo {nodo} es {grado}")
+            return grado
+        
+    def gradoEntrada(self, nodo): #cantidad de aristas que entran en un nodo
+        if nodo >= self.__numVertices:
+            raise ValueError("nodo fuera de rango")
+        else:
+            grado = np.sum(self.__matriz[:, nodo])
+            print(f"el grado de entrada del nodo {nodo} es {grado}")
+            return grado
+        
+    def nodoFuente(self, nodo): #no tiene aristas entrantes
+        if self.gradoEntrada(nodo) == 0:
+            print(f"nodo {nodo} es fuente")
+            return True
+        else:
+            print(f"nodo {nodo} no es fuente")
+            return False
+
+    def nodoSumidero(self, nodo): #no tiene aristas salientes
+        if self.gradoSalida(nodo) == 0:
+            print(f"nodo {nodo} es sumidero")
+            return True
+        else:
+            print(f"nodo {nodo} no es sumidero")
+            return False
+
             
     def camino(self, inicio, fin):
         if inicio >= self.__numVertices or fin >= self.__numVertices:
@@ -93,10 +120,17 @@ if __name__ == "__main__":
     g.agregarArista(0, 3)
     g.agregarArista(2, 4)
     g.agregarArista(1, 3)
+    g.agregarArista(1, 4)
+    g.agregarArista(3, 0)
     
     g.mostrar()
     g.adyacentes(2)
-    g.grado(1)
+    g.gradoSalida(1)
+    g.gradoEntrada(0)
+
+    g.nodoFuente(0)
+    g.nodoSumidero(3)
+    
     g.camino(0, 4)
     
     if g.conexo():

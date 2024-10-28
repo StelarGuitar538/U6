@@ -25,16 +25,11 @@ class encadenada:
         if destino>self.__cvertices or origen>self.__cvertices:
             raise IndexError("Vertices incorrectos, estan fuera del rango")
         else:
-            o=Nodo(origen) 
             d=Nodo(destino)
             
             d.setSig(self.__arreglo[origen])
             self.__arreglo[origen]= d
-            
-            o.setSig(self.__arreglo[destino])
-            self.__arreglo[destino]= o
-            
-            print(f"Se agregó arista entre {origen} y {destino}")
+            print(f"Se agregó arista de {origen} a {destino}")
         
         
     def adyacentes(self, nodo):
@@ -47,7 +42,7 @@ class encadenada:
                 print(actual.getDato(), end="->")
                 actual=actual.getSig()
     
-    def grado(self, nodo):
+    def gradoSalida(self, nodo):
         if nodo>=self.__cvertices:
             raise IndexError("Nodo incorrecto, esta fuera del rango")
         else:
@@ -56,7 +51,36 @@ class encadenada:
             while actual!=None:
                 contador+=1
                 actual=actual.getSig()
-            print(f"\n El vertice {nodo} es de grado {contador}")
+            print(f"\n El vertice {nodo} tiene grado de salida {contador}")
+
+    def gradoEntrada(self, nodo):
+        if nodo>=self.__cvertices:
+            raise IndexError("Nodo incorrecto, esta fuera del rango")
+        else:
+            contador = 0
+            for i in range(self.__cvertices):
+                actual = self.__arreglo[i]
+                while actual!=None:
+                    if actual.getDato() == nodo:
+                        contador += 1
+                    actual = actual.getSig()
+            print(f"\n El vertice {nodo} tiene grado de entrada {contador}")
+
+    def nodoFuente(self, nodo):
+        if self.gradoEntrada(nodo) == 0:
+            print(f"nodo {nodo} es fuente")
+            return True
+        else:
+            print(f"nodo {nodo} no es fuente")
+            return False
+
+    def nodoSumidero(self, nodo):
+        if self.gradoSalida(nodo) == 0:
+            print(f"nodo {nodo} es sumidero")
+            return True
+        else:
+            print(f"nodo {nodo} no es sumidero")
+            return False
                 
     
     def camino(self, inicio, fin):
@@ -145,7 +169,11 @@ if __name__== "__main__":
     
     e.adyacentes(4)
     
-    e.grado(1)
+    e.gradoSalida(1)
+    e.gradoEntrada(0)
+
+    e.nodoFuente(0)
+    e.nodoSumidero(3)
     
     print(f" Camino final: {e.camino(1,4)}")
     
