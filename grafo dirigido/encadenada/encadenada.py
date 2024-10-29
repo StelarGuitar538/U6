@@ -139,6 +139,25 @@ class encadenada:
                         cola.append(i)
         return all(visitados)
        
+    def invertirGrafo(self):
+        grafoInverso = encadenada(self.__cvertices)
+        for i in range(self.__cvertices):
+            actual = self.__arreglo[i]
+            while actual!=None:
+                destino = actual.getDato()
+                grafoInverso.insertar(destino, i)
+                actual = actual.getSig()
+        return grafoInverso
+       
+    def grafoConexo(self):
+        grafoInverso = self.invertirGrafo()
+        if self.BEP(0) and grafoInverso.BEP(0):
+            print("grafo fuerte conexo")
+        elif self.BEP(0) or grafoInverso.BEP(0):
+            print("grafo simple conexo")
+        else:
+            print("grafo no conexo")
+    
     def aciclico(self):
         visitados = [False] * self.__cvertices
         pila=[(0, -1)]
@@ -189,10 +208,8 @@ if __name__== "__main__":
     
     print(f" Camino final: {e.camino(1,4)}")
     
-    if e.BEP(0)!=False:
-        print ("El grafo es conexo")
-    else:  print ("El grafo no es conexo")
-
+    e.grafoConexo()
+    
     if e.aciclico()!=False:
         print ("El grafo es aciclico")
     else:  print ("El grafo no es aciclico")

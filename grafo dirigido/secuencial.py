@@ -33,7 +33,10 @@ class Secuencial:
         if nodo >= self.__numVertices:
             raise ValueError("nodo fuera de rango")
         else:
-            grado = np.sum(self.__matriz[nodo])
+            grado = 0
+            for i in range(self.__numVertices):
+                if self.__matriz[nodo, i] == 1:
+                    grado += 1
             print(f"el grado de salida del nodo {nodo} es {grado}")
             return grado
         
@@ -41,7 +44,10 @@ class Secuencial:
         if nodo >= self.__numVertices:
             raise ValueError("nodo fuera de rango")
         else:
-            grado = np.sum(self.__matriz[:, nodo])
+            grado = 0
+            for i in range(self.__numVertices):
+                if self.__matriz[i, nodo] == 1:
+                    grado += 1
             print(f"el grado de entrada del nodo {nodo} es {grado}")
             return grado
         
@@ -106,6 +112,23 @@ class Secuencial:
                         cola.append(i)
         return all(visitados)
     
+    def invertirGrafo(self):
+        grafoInverso = Secuencial(self.__numVertices)
+        for i in range(self.__numVertices):
+            for j in range(self.__numVertices):
+                if self.__matriz[i][j] == 1:
+                    grafoInverso.agregarArista(j, i)
+        return grafoInverso
+    
+    def grafoConexo(self):
+        grafoInverso = self.invertirGrafo()
+        if self.BEP(0) and grafoInverso.BEP(0):
+            print("grafo fuerte conexo")
+        elif self.BEP(0) or grafoInverso.BEP(0):
+            print("grafo simpleconexo")
+        else:
+            print("grafo no conexo")
+        
 
     def aciclico(self):
         visitados = [False] * self.__numVertices
@@ -133,6 +156,7 @@ if __name__ == "__main__":
     g.agregarArista(1, 3)
     g.agregarArista(1, 4)
     g.agregarArista(3, 0)
+    g.agregarArista(4, 2)
     
     g.mostrar()
     g.adyacentes(2)
@@ -144,10 +168,7 @@ if __name__ == "__main__":
     
     g.camino(0, 4)
     
-    if g.BEP(0):
-        print("grafo conexo")
-    else:
-        print("no es conexo")
+    g.grafoConexo()
 
     if g.aciclico():
         print("grafo aciclico")
